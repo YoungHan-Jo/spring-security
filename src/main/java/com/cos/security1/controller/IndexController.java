@@ -3,6 +3,9 @@ package com.cos.security1.controller;
 import com.cos.security1.model.User;
 import com.cos.security1.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PostAuthorize;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -61,6 +64,18 @@ public class IndexController {
         userRepository.save(user); // 회원가입 잘 되지만. 비밀번호:1234로 저장되면 시큐리티 로그인을 할 수 없음.
 
         return "redirect:/loginForm";
+    }
+
+    @Secured("ROLE_ADMIN") // 한 개 걸기
+    @GetMapping("/info")
+    public @ResponseBody String info() {
+        return "개인정보";
+    }
+
+    @PreAuthorize("hasRole('ROLE_MANAGER') or hasRole('ROLE_ADMIN')") //메서드 시작하기 전 실행// 여러 개 걸기
+    @GetMapping("/data")
+    public @ResponseBody String data() {
+        return "데이터정보";
     }
 
 
