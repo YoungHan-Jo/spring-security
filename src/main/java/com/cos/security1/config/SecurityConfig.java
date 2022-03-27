@@ -19,10 +19,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final PrincipalOauth2UserService principalOauth2UserService;
 
-    @Bean // 해당 메서드의 리턴되는 오브젝트를 IoC로 등록해준다.
-    public BCryptPasswordEncoder encoderPwd() {
-        return new BCryptPasswordEncoder();
-    }
+
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -42,7 +39,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .oauth2Login()
                 .loginPage("/loginForm") // 구글 로그인이 완료된 뒤, 후처리가 필요함.
                 .userInfoEndpoint()
-                .userService(principalOauth2UserService);
+                .userService(principalOauth2UserService) // oauth2로 로그인 하면 이 클래스를 장착함
         ;
     }
 }
