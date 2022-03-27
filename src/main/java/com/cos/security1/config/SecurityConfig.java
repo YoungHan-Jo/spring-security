@@ -1,5 +1,8 @@
 package com.cos.security1.config;
 
+import com.cos.security1.config.oauth.PrincipalOauth2UserService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -11,7 +14,10 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 @Configuration // 설정파일 등록
 @EnableWebSecurity // 시프링 시큐리티 필터가 스프링 필터체인에 등록됨
 @EnableGlobalMethodSecurity(securedEnabled = true, prePostEnabled = true) //secured 어노테이션 활성화 , pre(post)Authorize 어노테이션 활성화
+@RequiredArgsConstructor
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
+
+    private final PrincipalOauth2UserService principalOauth2UserService;
 
     @Bean // 해당 메서드의 리턴되는 오브젝트를 IoC로 등록해준다.
     public BCryptPasswordEncoder encoderPwd() {
@@ -34,7 +40,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .defaultSuccessUrl("/") // 로그인 성공하면 어디로 갈지 설정
                 .and()
                 .oauth2Login()
-                .loginPage("/loginForm")
+                .loginPage("/loginForm") // 구글 로그인이 완료된 뒤, 후처리가 필요함.
+                .userInfoEndpoint()
+                .userService(principalOauth2UserService);
         ;
     }
 }

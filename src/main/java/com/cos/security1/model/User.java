@@ -20,6 +20,9 @@ public class User {
     private String email;
     private String role; // ROLE_USER, ROLE_ADMIN
 
+    private String provider;
+    private String providerId;
+
     @CreationTimestamp // 날짜 자동 생성
     private LocalDateTime createDate;
 

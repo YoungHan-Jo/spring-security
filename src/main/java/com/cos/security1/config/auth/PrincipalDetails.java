@@ -12,18 +12,41 @@ package com.cos.security1.config.auth;
 // Security Session => Authentication => UserDetails(PrincipalDetails)
 
 import com.cos.security1.model.User;
+import lombok.Data;
+import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Map;
 
-public class PrincipalDetails implements UserDetails { // 상속으로 인해 PrincipalDetails는 UserDetails이 될 수 있다.
+@Getter
+public class PrincipalDetails implements UserDetails, OAuth2User { // 상속으로 인해 PrincipalDetails는 UserDetails이 될 수 있다.
 
     private User user; // 콤포지션
+    private Map<String, Object> attributes;
 
+    // 일반 로그인 시 사용할 생성자
     public PrincipalDetails(User user) {
         this.user = user;
+    }
+
+    // OAuth 로그인 시 사용할 생성자
+    public PrincipalDetails(User user, Map<String, Object> attributes) {
+        this.user = user;
+        this.attributes = attributes;
+    }
+
+    @Override
+    public Map<String, Object> getAttributes() {
+        return attributes;
+    }
+
+    @Override
+    public String getName() { // 사용하지 않음
+        return null;
     }
 
     // 해당 User의 권한을 리턴하는 곳
@@ -71,4 +94,6 @@ public class PrincipalDetails implements UserDetails { // 상속으로 인해 Pr
         // 현재시간 - 로그인시간 = 1년을 초과하면 return false;
         return true;
     }
+
+
 }
