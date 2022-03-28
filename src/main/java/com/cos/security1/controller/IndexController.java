@@ -49,6 +49,7 @@ public class IndexController {
         return "oauth 세션 정보확인하기";
     }
 
+    
     @GetMapping({"","/"})
     public String index() {
         // 머스테치 기본 폴더 src/main/resources/
