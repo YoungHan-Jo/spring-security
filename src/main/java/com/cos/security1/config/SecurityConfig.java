@@ -19,8 +19,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final PrincipalOauth2UserService principalOauth2UserService;
 
-
-
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable(); //비활성화
